@@ -62,7 +62,9 @@ class NeoButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-          decoration: NeoStyle.pill(color: onPressed == null ? color.withValues(alpha: 0.4) : color),
+          decoration: NeoStyle.pill(
+            color: onPressed == null ? color.withValues(alpha: 0.4) : color,
+          ),
           child: Row(
             mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -74,9 +76,9 @@ class NeoButton extends StatelessWidget {
               Text(
                 label.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: textColor,
-                      letterSpacing: 1.2,
-                    ),
+                  color: textColor,
+                  letterSpacing: 1.2,
+                ),
               ),
             ],
           ),

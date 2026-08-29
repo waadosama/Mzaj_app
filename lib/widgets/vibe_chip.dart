@@ -27,9 +27,9 @@ class VibeChip extends StatelessWidget {
         child: Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: isSelected ? MzajColors.white : MzajColors.navy,
-              ),
+            fontWeight: FontWeight.w800,
+            color: isSelected ? MzajColors.white : MzajColors.navy,
+          ),
         ),
       ),
     );

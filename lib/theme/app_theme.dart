@@ -138,7 +138,10 @@ class MzajTheme {
           color: MzajColors.navy.withValues(alpha: 0.5),
           fontWeight: FontWeight.w700,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 18,
+        ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
@@ -150,7 +153,9 @@ class MzajTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: MzajColors.navy,
           foregroundColor: MzajColors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(999),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           textStyle: GoogleFonts.nunito(fontWeight: FontWeight.w800),
         ),

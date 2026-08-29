@@ -26,10 +26,8 @@ class WelcomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Mzaj',
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                              fontSize: 28,
-                              color: MzajColors.white,
-                            ),
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(fontSize: 28, color: MzajColors.white),
                       ),
                       const SizedBox(height: 20),
                       Center(
@@ -61,17 +59,15 @@ class WelcomeScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       Text(
                         'A soundtrack\nfor every mood.',
-                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                              color: MzajColors.lime,
-                              fontSize: 42,
-                            ),
+                        style: Theme.of(context).textTheme.displayLarge
+                            ?.copyWith(color: MzajColors.lime, fontSize: 42),
                       ),
                       const SizedBox(height: 14),
                       Text(
                         'Tell us what you feel and discover songs that fit your moment.',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: MzajColors.white.withValues(alpha: 0.82),
-                            ),
+                          color: MzajColors.white.withValues(alpha: 0.82),
+                        ),
                       ),
                       const SizedBox(height: 30),
                       NeoButton(
@@ -82,14 +78,17 @@ class WelcomeScreen extends StatelessWidget {
                         icon: Icons.arrow_forward_rounded,
                         onPressed: () => Navigator.push<void>(
                           context,
-                          MaterialPageRoute<void>(builder: (_) => const SearchScreen()),
+                          MaterialPageRoute<void>(
+                            builder: (_) => const SearchScreen(),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
                       Center(
                         child: Text(
                           'Discover music your way',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
                                 color: MzajColors.white.withValues(alpha: 0.62),
                               ),
                         ),

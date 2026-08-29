@@ -8,7 +8,6 @@ import '../theme/app_theme.dart';
 import '../widgets/neo_card.dart';
 import '../widgets/state_views.dart';
 
-
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key});
 
@@ -22,17 +21,17 @@ class ResultsScreen extends StatelessWidget {
         if (didPop) context.read<PlayerProvider>().stop();
       },
       child: Scaffold(
-      backgroundColor: MzajColors.sky,
-      appBar: AppBar(
-        title: Text(search.lastQuery.isEmpty ? 'Results' : search.lastQuery),
-        leading: NeoIconButton(
-          icon: Icons.arrow_back_rounded,
-          onPressed: () => Navigator.pop(context),
+        backgroundColor: MzajColors.sky,
+        appBar: AppBar(
+          title: Text(search.lastQuery.isEmpty ? 'Results' : search.lastQuery),
+          leading: NeoIconButton(
+            icon: Icons.arrow_back_rounded,
+            onPressed: () => Navigator.pop(context),
+          ),
+          leadingWidth: 72,
         ),
-        leadingWidth: 72,
+        body: _buildBody(context, search),
       ),
-      body: _buildBody(context, search),
-    ),
     );
   }
 
@@ -147,9 +146,9 @@ class _ResultCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 12,
-                          color: MzajColors.black.withValues(alpha: 0.55),
-                        ),
+                      fontSize: 12,
+                      color: MzajColors.black.withValues(alpha: 0.55),
+                    ),
                   ),
                 ],
               ),
@@ -170,7 +169,11 @@ class _CoverArt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: NeoStyle.card(color: MzajColors.black, radius: 16, shadow: false),
+      decoration: NeoStyle.card(
+        color: MzajColors.black,
+        radius: 16,
+        shadow: false,
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(13),
         child: song.artworkUrl != null
