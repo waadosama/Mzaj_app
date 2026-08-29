@@ -37,9 +37,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: MzajColors.mintBlue,
+        backgroundColor: MzajColors.navy,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          elevation: 0,
           leading: NeoIconButton(
             icon: Icons.arrow_back_rounded,
             color: MzajColors.lime,
@@ -47,12 +48,14 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           leadingWidth: 76,
           title: const Text('Find your vibe'),
+          titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: MzajColors.white),
+          iconTheme: const IconThemeData(color: MzajColors.white),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: NeoStyle.pill(color: MzajColors.white.withValues(alpha: 0.7)),
+                decoration: NeoStyle.pill(color: MzajColors.lime),
                 child: Text(
                   'Live',
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(color: MzajColors.navy),
@@ -77,10 +80,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: NeoStyle.pill(color: MzajColors.white.withValues(alpha: 0.7)),
+                            decoration: NeoStyle.pill(color: MzajColors.white.withValues(alpha: 0.14)),
                             child: Text(
                               'Mood match',
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: MzajColors.navy),
+                              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: MzajColors.white),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -88,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             'What are you\nin the mood for?',
                             style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               fontSize: 31,
-                              color: MzajColors.navy,
+                              color: MzajColors.white,
                               height: 1.08,
                             ),
                           ),
@@ -106,14 +109,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [MzajColors.white.withValues(alpha: 0.95), MzajColors.sky.withValues(alpha: 0.8)],
+                      colors: [MzajColors.white.withValues(alpha: 0.96), MzajColors.sky.withValues(alpha: 0.9)],
                     ),
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                        color: MzajColors.navy.withValues(alpha: 0.08),
-                        offset: const Offset(0, 12),
-                        blurRadius: 18,
+                        color: MzajColors.black.withValues(alpha: 0.12),
+                        offset: const Offset(0, 14),
+                        blurRadius: 22,
                       ),
                     ],
                   ),
@@ -123,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       Text(
                         'Search a song, artist, or describe the feeling.',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: MzajColors.navy.withValues(alpha: 0.75),
+                          color: MzajColors.navy.withValues(alpha: 0.78),
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -159,8 +162,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('POPULAR VIBES', style: Theme.of(context).textTheme.labelLarge),
-                    Text('6 picks', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: MzajColors.navy.withValues(alpha: 0.56))),
+                    Text('POPULAR VIBES', style: Theme.of(context).textTheme.labelLarge?.copyWith(color: MzajColors.lime)),
+                    Text('6 picks', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: MzajColors.white.withValues(alpha: 0.7))),
                   ],
                 ),
                 const SizedBox(height: 14),
@@ -168,9 +171,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: MzajColors.white.withValues(alpha: 0.76),
+                    color: MzajColors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: MzajColors.white.withValues(alpha: 0.8)),
+                    border: Border.all(color: MzajColors.white.withValues(alpha: 0.12)),
                   ),
                   child: Wrap(
                     spacing: 10,
@@ -191,8 +194,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 NeoButton(
                   label: 'Search music',
                   expanded: true,
-                  color: MzajColors.navy,
-                  textColor: MzajColors.white,
+                  color: MzajColors.lime,
+                  textColor: MzajColors.navy,
                   icon: Icons.search_rounded,
                   onPressed: () => _search(_controller.text),
                 ),
