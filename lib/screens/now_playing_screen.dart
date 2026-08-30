@@ -58,11 +58,16 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
     }
 
     return Scaffold(
-      backgroundColor: MzajColors.sky,
+      backgroundColor: MzajColors.navy,
       appBar: AppBar(
+        foregroundColor: MzajColors.white,
         title: const Text('Now playing'),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: MzajColors.white,
+        ),
         leading: NeoIconButton(
           icon: Icons.keyboard_arrow_down_rounded,
+          color: MzajColors.mintBlue,
           onPressed: () => Navigator.pop(context),
         ),
         leadingWidth: 72,
@@ -77,15 +82,20 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
           ),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        child: song == null
-            ? const NoSongView()
-            : LayoutBuilder(
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: MzajColors.sky,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: song == null
+              ? const NoSongView()
+              : LayoutBuilder(
                 builder: (context, constraints) {
-                  final artSize = math.min(constraints.maxWidth - 64, 340.0);
+                  final artSize = math.min(constraints.maxWidth - 52, 350.0);
                   return SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+                    padding: const EdgeInsets.fromLTRB(24, 22, 24, 28),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: constraints.maxHeight - 24,
@@ -119,6 +129,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                   );
                 },
               ),
+        ),
       ),
     );
   }

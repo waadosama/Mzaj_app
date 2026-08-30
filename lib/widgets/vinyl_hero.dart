@@ -40,7 +40,7 @@ class VinylHero extends StatelessWidget {
               height: size * 0.92,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: MzajColors.mintBlue.withValues(alpha: 0.42),
+                color: MzajColors.white.withValues(alpha: 0.32),
                 boxShadow: [
                   BoxShadow(
                     color: MzajColors.navy.withValues(alpha: 0.18),

@@ -16,23 +16,17 @@ class ResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final search = context.watch<SearchProvider>();
 
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) context.read<PlayerProvider>().stop();
-      },
-      child: Scaffold(
-        backgroundColor: MzajColors.sky,
-        appBar: AppBar(
-          title: Text(search.lastQuery.isEmpty ? 'Results' : search.lastQuery),
-          leading: NeoIconButton(
-            icon: Icons.arrow_back_rounded,
-            onPressed: () => Navigator.pop(context),
-          ),
-          leadingWidth: 72,
+    return Scaffold(
+      backgroundColor: MzajColors.sky,
+      appBar: AppBar(
+        title: Text(search.lastQuery.isEmpty ? 'Results' : search.lastQuery),
+        leading: NeoIconButton(
+          icon: Icons.arrow_back_rounded,
+          onPressed: () => Navigator.pop(context),
         ),
-        body: _buildBody(context, search),
+        leadingWidth: 72,
       ),
+      body: _buildBody(context, search),
     );
   }
 
@@ -80,7 +74,10 @@ class ResultsScreen extends StatelessWidget {
                 song: song,
                 index: index,
                 onTap: () async {
-                  await context.read<PlayerProvider>().togglePreview(song);
+                  final player = context.read<PlayerProvider>();
+                  if (!player.isCurrentSong(song)) {
+                    await player.togglePreview(song);
+                  }
                   if (!context.mounted) return;
                   await Navigator.push<void>(
                     context,

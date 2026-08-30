@@ -13,33 +13,96 @@ class TransportControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Icon(Icons.shuffle_rounded, color: MzajColors.navy, size: 30),
-        const Icon(
-          Icons.skip_previous_rounded,
-          color: MzajColors.navy,
-          size: 44,
+        _ControlCircle(
+          icon: Icons.shuffle_rounded,
+          size: 24,
+          isPlaying: player.isPlaying,
+        ),
+        _ControlCircle(
+          icon: Icons.skip_previous_rounded,
+          size: 34,
+          isPlaying: player.isPlaying,
         ),
         GestureDetector(
           onTap: player.toggleCurrent,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            width: 86,
-            height: 86,
+            duration: const Duration(milliseconds: 500),
+            width: 92,
+            height: 92,
             decoration: BoxDecoration(
-              color: player.isPlaying ? MzajColors.mintBlue : MzajColors.white,
+              color: player.isPlaying ? MzajColors.lime : MzajColors.white,
               shape: BoxShape.circle,
-              border: Border.all(color: MzajColors.black.withValues(alpha: 0.4)),
+              border: Border.all(
+                color: player.isPlaying
+                    ? MzajColors.lime.withValues(alpha: 0.8)
+                    : MzajColors.white.withValues(alpha: 0.7),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: player.isPlaying
+                      ? MzajColors.lime.withValues(alpha: 0.3)
+                      : MzajColors.navy.withValues(alpha: 0.24),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ],
             ),
             child: Icon(
               player.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-              color: MzajColors.black.withValues(alpha: 0.65),
+              color: player.isPlaying ? MzajColors.navy : MzajColors.navy,
               size: 52,
             ),
           ),
         ),
-        const Icon(Icons.skip_next_rounded, color: MzajColors.navy, size: 44),
-        const Icon(Icons.repeat_rounded, color: MzajColors.navy, size: 30),
+        _ControlCircle(
+          icon: Icons.skip_next_rounded,
+          size: 34,
+          isPlaying: player.isPlaying,
+        ),
+        _ControlCircle(
+          icon: Icons.repeat_rounded,
+          size: 24,
+          isPlaying: player.isPlaying,
+        ),
       ],
+    );
+  }
+}
+
+class _ControlCircle extends StatelessWidget {
+  const _ControlCircle({
+    required this.icon,
+    required this.size,
+    this.isPlaying = false,
+  });
+
+  final IconData icon;
+  final double size;
+  final bool isPlaying;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: isPlaying
+            ? MzajColors.white.withValues(alpha: 0.58)
+            : MzajColors.white.withValues(alpha: 0.4),
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isPlaying
+              ? MzajColors.lime.withValues(alpha: 0.3)
+              : Colors.transparent,
+          width: 1.5,
+        ),
+      ),
+      child: Icon(
+        icon,
+        color: isPlaying ? MzajColors.lime : MzajColors.navy,
+        size: size,
+      ),
     );
   }
 }

@@ -29,26 +29,46 @@ class ProgressPanel extends StatelessWidget {
               1.0,
             );
 
-            return Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 5,
-                    backgroundColor: MzajColors.black.withValues(alpha: 0.16),
-                    valueColor: const AlwaysStoppedAnimation(MzajColors.navy),
+            return Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: MzajColors.navy.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: player.isPlaying
+                      ? MzajColors.lime.withValues(alpha: 0.3)
+                      : MzajColors.white.withValues(alpha: 0.36),
+                ),
+              ),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 7,
+                      backgroundColor: MzajColors.white.withValues(alpha: 0.65),
+                      valueColor: AlwaysStoppedAnimation(
+                        player.isPlaying ? MzajColors.lime : MzajColors.navy,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(_formatDuration(position), style: _timeStyle(context)),
-                    Text(_formatDuration(duration), style: _timeStyle(context)),
-                  ],
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _formatDuration(position),
+                        style: _timeStyle(context),
+                      ),
+                      Text(
+                        _formatDuration(duration),
+                        style: _timeStyle(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           },
         );
@@ -58,7 +78,7 @@ class ProgressPanel extends StatelessWidget {
 
   TextStyle? _timeStyle(BuildContext context) =>
       Theme.of(context).textTheme.labelLarge?.copyWith(
-        color: MzajColors.black.withValues(alpha: 0.55),
+        color: MzajColors.navy.withValues(alpha: 0.76),
       );
 
   String _formatDuration(Duration duration) {
