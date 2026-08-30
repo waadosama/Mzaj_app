@@ -9,6 +9,34 @@ import '../widgets/neo_card.dart';
 import '../widgets/state_views.dart';
 import 'now_playing_screen.dart';
 
+Route<void> _buildNowPlayingRoute() {
+  return PageRouteBuilder<void>(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const NowPlayingScreen(),
+    transitionDuration: const Duration(milliseconds: 500),
+    reverseTransitionDuration: const Duration(milliseconds: 420),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final slideTween = Tween<Offset>(
+        begin: const Offset(0, 0.22),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: Curves.easeOutCubic));
+
+      final fadeTween = Tween<double>(
+        begin: 0.15,
+        end: 1,
+      ).chain(CurveTween(curve: Curves.easeOut));
+
+      return FadeTransition(
+        opacity: animation.drive(fadeTween),
+        child: SlideTransition(
+          position: animation.drive(slideTween),
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key});
 
@@ -79,12 +107,7 @@ class ResultsScreen extends StatelessWidget {
                     await player.togglePreview(song);
                   }
                   if (!context.mounted) return;
-                  await Navigator.push<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => const NowPlayingScreen(),
-                    ),
-                  );
+                  await Navigator.push<void>(context, _buildNowPlayingRoute());
                 },
               );
             },

@@ -62,9 +62,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
       appBar: AppBar(
         foregroundColor: MzajColors.white,
         title: const Text('Now playing'),
-        titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: MzajColors.white,
-        ),
+        titleTextStyle: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(color: MzajColors.white),
         leading: NeoIconButton(
           icon: Icons.keyboard_arrow_down_rounded,
           color: MzajColors.mintBlue,
@@ -92,43 +92,43 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
           child: song == null
               ? const NoSongView()
               : LayoutBuilder(
-                builder: (context, constraints) {
-                  final artSize = math.min(constraints.maxWidth - 52, 350.0);
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 22, 24, 28),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight - 24,
+                  builder: (context, constraints) {
+                    final artSize = math.min(constraints.maxWidth - 52, 350.0);
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(24, 22, 24, 28),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight - 24,
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            NowPlayingHeader(isPlaying: player.isPlaying),
+                            const SizedBox(height: 18),
+                            VinylHero(
+                              song: song,
+                              size: artSize,
+                              spinController: _spinController,
+                              pulseController: _pulseController,
+                              isPlaying: player.isPlaying,
+                            ),
+                            const SizedBox(height: 28),
+                            SongDetails(song: song),
+                            const SizedBox(height: 18),
+                            ProgressPanel(song: song),
+                            const SizedBox(height: 24),
+                            TransportControls(player: player),
+                            const SizedBox(height: 22),
+                            Equalizer(
+                              animation: _pulseController,
+                              isPlaying: player.isPlaying,
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          NowPlayingHeader(isPlaying: player.isPlaying),
-                          const SizedBox(height: 18),
-                          VinylHero(
-                            song: song,
-                            size: artSize,
-                            spinController: _spinController,
-                            pulseController: _pulseController,
-                            isPlaying: player.isPlaying,
-                          ),
-                          const SizedBox(height: 28),
-                          SongDetails(song: song),
-                          const SizedBox(height: 18),
-                          ProgressPanel(song: song),
-                          const SizedBox(height: 24),
-                          TransportControls(player: player),
-                          const SizedBox(height: 22),
-                          Equalizer(
-                            animation: _pulseController,
-                            isPlaying: player.isPlaying,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
         ),
       ),
     );

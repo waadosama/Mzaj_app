@@ -80,6 +80,12 @@ class PlayerProvider extends ChangeNotifier {
     await togglePreview(song);
   }
 
+  Future<void> pause() async {
+    if (currentSong == null) return;
+    await _audio.pause();
+    notifyListeners();
+  }
+
   bool isCurrentSong(Song song) => _audio.currentSong?.id == song.id;
 
   Future<void> stop() => _audio.stop();
