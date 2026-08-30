@@ -10,7 +10,7 @@ class AudioService {
 
   Song? get currentSong => _currentSong;
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
-  Stream<Duration?> get positionStream => _player.positionStream;
+  Stream<Duration> get positionStream => _player.positionStream;
   Stream<Duration?> get durationStream => _player.durationStream;
   bool get isPlaying => _player.playing;
 

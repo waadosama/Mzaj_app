@@ -7,6 +7,7 @@ import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/neo_card.dart';
 import '../widgets/state_views.dart';
+import 'now_playing_screen.dart';
 
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key});
@@ -78,7 +79,16 @@ class ResultsScreen extends StatelessWidget {
               return _ResultCard(
                 song: song,
                 index: index,
-                onTap: () => context.read<PlayerProvider>().togglePreview(song),
+                onTap: () async {
+                  await context.read<PlayerProvider>().togglePreview(song);
+                  if (!context.mounted) return;
+                  await Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => const NowPlayingScreen(),
+                    ),
+                  );
+                },
               );
             },
           ),

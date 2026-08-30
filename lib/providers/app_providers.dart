@@ -64,6 +64,8 @@ class PlayerProvider extends ChangeNotifier {
   final AudioService _audio;
 
   Song? get currentSong => _audio.currentSong;
+  Stream<Duration> get positionStream => _audio.positionStream;
+  Stream<Duration?> get durationStream => _audio.durationStream;
   bool get isPlaying => _audio.isPlaying;
 
   void init() {
@@ -71,6 +73,12 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   Future<void> togglePreview(Song song) => _audio.playPreview(song);
+
+  Future<void> toggleCurrent() async {
+    final song = currentSong;
+    if (song == null) return;
+    await togglePreview(song);
+  }
 
   bool isCurrentSong(Song song) => _audio.currentSong?.id == song.id;
 
