@@ -25,11 +25,21 @@ class Song {
   }
 
   factory Song.fromJson(Map<String, dynamic> json) {
+    // Handle both iTunes API format and database format
     return Song(
-      id: json['trackId'] as int,
-      title: json['trackName'] as String? ?? 'Unknown Track',
-      artist: json['artistName'] as String? ?? 'Unknown Artist',
-      album: json['collectionName'] as String? ?? 'Unknown Album',
+      id: json['trackId'] as int? ?? json['id'] as int? ?? 0,
+      title:
+          json['trackName'] as String? ??
+          json['title'] as String? ??
+          'Unknown Track',
+      artist:
+          json['artistName'] as String? ??
+          json['artist'] as String? ??
+          'Unknown Artist',
+      album:
+          json['collectionName'] as String? ??
+          json['album'] as String? ??
+          'Unknown Album',
       previewUrl: json['previewUrl'] as String?,
       artworkUrl: json['artworkUrl100'] as String?,
       durationMs: json['trackTimeMillis'] as int?,
@@ -37,14 +47,14 @@ class Song {
   }
 
   Map<String, dynamic> toJson() => {
-        'trackId': id,
-        'trackName': title,
-        'artistName': artist,
-        'collectionName': album,
-        'previewUrl': previewUrl,
-        'artworkUrl100': artworkUrl,
-        'trackTimeMillis': durationMs,
-      };
+    'trackId': id,
+    'trackName': title,
+    'artistName': artist,
+    'collectionName': album,
+    'previewUrl': previewUrl,
+    'artworkUrl100': artworkUrl,
+    'trackTimeMillis': durationMs,
+  };
 
   @override
   bool operator ==(Object other) =>

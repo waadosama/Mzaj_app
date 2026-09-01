@@ -5,6 +5,7 @@ import 'providers/app_providers.dart';
 import 'screens/welcome_screen.dart';
 import 'services/audio_service.dart';
 import 'services/itunes_api.dart';
+import 'services/playlist_database.dart';
 import 'theme/app_theme.dart';
 
 class MzajApp extends StatelessWidget {
@@ -15,6 +16,7 @@ class MzajApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(create: (_) => ItunesApi()),
+        Provider(create: (_) => PlaylistDatabase()),
         ChangeNotifierProvider(
           create: (ctx) => SearchProvider(ctx.read<ItunesApi>()),
         ),
@@ -24,6 +26,9 @@ class MzajApp extends StatelessWidget {
             player.init();
             return player;
           },
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => PlaylistProvider(ctx.read<PlaylistDatabase>()),
         ),
       ],
       child: MaterialApp(

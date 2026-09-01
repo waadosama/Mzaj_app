@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 
+import '../models/playlist.dart';
 import '../models/song.dart';
 import '../services/audio_service.dart';
 import '../services/itunes_api.dart';
+import '../services/playlist_database.dart';
 
 enum SearchStatus { idle, loading, success, error }
 
@@ -94,5 +96,130 @@ class PlayerProvider extends ChangeNotifier {
   void dispose() {
     _audio.dispose();
     super.dispose();
+  }
+}
+
+class PlaylistProvider extends ChangeNotifier {
+  PlaylistProvider(this._database);
+
+  final PlaylistDatabase _database;
+
+  List<Playlist> _playlists = [];
+  Playlist? _currentPlaylist;
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  List<Playlist> get playlists => _playlists;
+  Playlist? get currentPlaylist => _currentPlaylist;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+
+  Future<void> loadPlaylists() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _playlists = await _database.getAllPlaylists();
+      _isLoading = false;
+    } catch (e) {
+      _errorMessage = 'Failed to load playlists: ${e.toString()}';
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<bool> createPlaylist(String name, {String description = ''}) async {
+    try {
+      final playlist = Playlist(
+        name: name,
+        description: description,
+        createdAt: DateTime.now(),
+      );
+      final id = await _database.createPlaylist(playlist);
+      final newPlaylist = playlist.copyWith(id: id);
+      _playlists.add(newPlaylist);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Failed to create playlist: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deletePlaylist(int playlistId) async {
+    try {
+      await _database.deletePlaylist(playlistId);
+      _playlists.removeWhere((p) => p.id == playlistId);
+      if (_currentPlaylist?.id == playlistId) {
+        _currentPlaylist = null;
+      }
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Failed to delete playlist: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<void> loadPlaylistWithSongs(int playlistId) async {
+    try {
+      _currentPlaylist = await _database.getPlaylistWithSongs(playlistId);
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = 'Failed to load playlist: ${e.toString()}';
+      notifyListeners();
+    }
+  }
+
+  Future<bool> addSongToPlaylist(int playlistId, Song song) async {
+    try {
+      await _database.addSongToPlaylist(playlistId, song);
+      if (_currentPlaylist?.id == playlistId) {
+        _currentPlaylist = await _database.getPlaylistWithSongs(playlistId);
+      }
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Failed to add song: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> removeSongFromPlaylist(int playlistId, int songId) async {
+    try {
+      await _database.removeSongFromPlaylist(playlistId, songId);
+      if (_currentPlaylist?.id == playlistId) {
+        _currentPlaylist = await _database.getPlaylistWithSongs(playlistId);
+      }
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Failed to remove song: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updatePlaylist(Playlist playlist) async {
+    try {
+      await _database.updatePlaylist(playlist);
+      final index = _playlists.indexWhere((p) => p.id == playlist.id);
+      if (index >= 0) {
+        _playlists[index] = playlist;
+      }
+      if (_currentPlaylist?.id == playlist.id) {
+        _currentPlaylist = playlist;
+      }
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Failed to update playlist: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
   }
 }

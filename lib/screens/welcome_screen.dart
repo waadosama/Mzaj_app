@@ -5,7 +5,6 @@ import '../widgets/charm_character.dart';
 import '../widgets/neo_card.dart';
 import 'search_screen.dart';
 
-/// Screen 1 — a focused welcome before the music discovery flow.
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -83,6 +82,7 @@ class WelcomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 12),
                       const SizedBox(height: 16),
                       Center(
                         child: Text(

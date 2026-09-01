@@ -136,6 +136,60 @@ class _ResultCard extends StatelessWidget {
     MzajColors.sky,
   ];
 
+  void _showAddToPlaylistDialog(BuildContext context) {
+    final playlistProvider = context.read<PlaylistProvider>();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Add to Playlist'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (playlistProvider.playlists.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'No playlists yet. Create one first!',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else
+                ...playlistProvider.playlists.map((playlist) {
+                  return ListTile(
+                    title: Text(playlist.name),
+                    subtitle: Text('${playlist.songCount} songs'),
+                    onTap: () async {
+                      await playlistProvider.addSongToPlaylist(
+                        playlist.id!,
+                        song,
+                      );
+                      if (!ctx.mounted) return;
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            '${song.title} added to ${playlist.name}',
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cardColor = _cardColors[index % _cardColors.length];
@@ -183,7 +237,22 @@ class _ResultCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                ),
+                const SizedBox(height: 8),
+                IconButton(
+                  icon: const Icon(Icons.playlist_add, color: MzajColors.pink),
+                  onPressed: () => _showAddToPlaylistDialog(context),
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  iconSize: 20,
+                ),
+              ],
+            ),
           ],
         ),
       ),
