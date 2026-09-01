@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/song.dart';
 import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
+import '../widgets/add_playlist_dialog.dart';
 import '../widgets/neo_card.dart';
 import '../widgets/state_views.dart';
 import 'now_playing_screen.dart';
@@ -149,10 +150,30 @@ class _ResultCard extends StatelessWidget {
               if (playlistProvider.playlists.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'No playlists yet. Create one first!',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        'No playlists yet. Create one first!',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => const AddPlaylistDialog(),
+                          );
+                        },
+                        icon: const Icon(Icons.add),
+                        label: const Text('Create Playlist'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MzajColors.pink,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 )
               else
