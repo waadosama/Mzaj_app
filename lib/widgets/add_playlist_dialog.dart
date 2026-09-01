@@ -13,26 +13,22 @@ class AddPlaylistDialog extends StatefulWidget {
 
 class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
   late TextEditingController _nameController;
-  late TextEditingController _descController;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
-    _descController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _descController.dispose();
     super.dispose();
   }
 
   Future<void> _createPlaylist() async {
     final name = _nameController.text.trim();
-    final description = _descController.text.trim();
 
     if (name.isEmpty) {
       if (mounted) {
@@ -48,7 +44,7 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
     try {
       final success = await context.read<PlaylistProvider>().createPlaylist(
         name,
-        description: description,
+        description: '',
       );
 
       if (mounted) {
@@ -88,31 +84,14 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
               controller: _nameController,
               enabled: !_isLoading,
               decoration: InputDecoration(
-                hintText: 'Playlist Name',
-                labelText: 'Name *',
+                hintText: 'Enter playlist name',
+                labelText: 'Playlist Name',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 prefixIcon: const Icon(Icons.playlist_play),
               ),
               autofocus: true,
-              textInputAction: TextInputAction.next,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _descController,
-              enabled: !_isLoading,
-              maxLines: 3,
-              minLines: 2,
-              decoration: InputDecoration(
-                hintText: 'Add a description (optional)',
-                labelText: 'Description',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.description),
-                alignLabelWithHint: true,
-              ),
               textInputAction: TextInputAction.done,
             ),
           ],
