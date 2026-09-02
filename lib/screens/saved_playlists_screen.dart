@@ -158,12 +158,6 @@ class _SavedPlaylistsScreenState extends State<SavedPlaylistsScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showCreatePlaylistDialog,
-        backgroundColor: MzajColors.pink,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

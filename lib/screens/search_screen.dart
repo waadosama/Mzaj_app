@@ -9,6 +9,7 @@ import '../widgets/charm_character.dart';
 import '../widgets/neo_card.dart';
 import '../widgets/vibe_chip.dart';
 import 'results_screen.dart';
+import 'saved_playlists_screen.dart';
 
 /// Screen 2 — dedicated music and mood search.
 class SearchScreen extends StatefulWidget {
@@ -64,15 +65,39 @@ class _SearchScreenState extends State<SearchScreen> {
       iconTheme: const IconThemeData(color: MzajColors.white),
       actions: [
         Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: IconButton(
+            icon: const Icon(Icons.library_music_rounded),
+            tooltip: 'My Playlists',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => const SavedPlaylistsScreen(),
+              ),
+            ),
+          ),
+        ),
+        Padding(
           padding: const EdgeInsets.only(right: 16),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: NeoStyle.pill(color: MzajColors.lime),
-            child: Text(
-              'Live',
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: MzajColors.navy),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.radio_button_checked_rounded,
+                  size: 14,
+                  color: MzajColors.navy,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Live',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(color: MzajColors.navy),
+                ),
+              ],
             ),
           ),
         ),
@@ -246,6 +271,7 @@ class _SearchScreenState extends State<SearchScreen> {
               icon: Icons.search_rounded,
               onPressed: () => _search(_controller.text),
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
