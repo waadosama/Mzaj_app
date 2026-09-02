@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.displayMedium
                             ?.copyWith(fontSize: 28, color: MzajColors.white),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
                       Center(
                         child: Stack(
                           clipBehavior: Clip.none,
@@ -55,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       Text(
                         'A soundtrack\nfor every mood.',
                         style: Theme.of(context).textTheme.displayLarge
@@ -68,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
                           color: MzajColors.white.withValues(alpha: 0.82),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 40),
                       NeoButton(
                         label: 'Get started',
                         expanded: true,

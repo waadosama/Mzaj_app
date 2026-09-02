@@ -234,7 +234,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'What are you\nin the mood for?',
+                        'Which vibe would\nyou pick?',
                         style: Theme.of(context).textTheme.displayMedium
                             ?.copyWith(
                               fontSize: 31,
