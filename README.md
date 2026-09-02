@@ -1,4 +1,4 @@
-# Mzaj
+# Mzaj Music App
 
 Mzaj is a modern Flutter music discovery and playlist app that helps users search for tracks by mood, preview them, and build custom playlists.
 
