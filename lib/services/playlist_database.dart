@@ -59,7 +59,17 @@ class PlaylistDatabase {
   Future<List<Playlist>> getAllPlaylists() async {
     final db = await database;
     final maps = await db.query(_playlistsTable);
-    return List.generate(maps.length, (i) => Playlist.fromMap(maps[i]));
+    final playlists = List.generate(
+      maps.length,
+      (i) => Playlist.fromMap(maps[i]),
+    );
+    return Future.wait(
+      playlists.map(
+        (playlist) => getPlaylistWithSongs(
+          playlist.id!,
+        ).then((loadedPlaylist) => loadedPlaylist ?? playlist),
+      ),
+    );
   }
 
   /// Get a specific playlist with all its songs

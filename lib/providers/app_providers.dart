@@ -148,6 +148,31 @@ class PlaylistProvider extends ChangeNotifier {
     }
   }
 
+  Future<Playlist?> createMoodPlaylist(String mood, List<Song> songs) async {
+    if (songs.isEmpty) return null;
+
+    try {
+      final playlist = Playlist(
+        name: '$mood Mood',
+        description: 'A playlist made for your $mood mood.',
+        createdAt: DateTime.now(),
+      );
+      final playlistId = await _database.createPlaylist(playlist);
+      for (final song in songs) {
+        await _database.addSongToPlaylist(playlistId, song);
+      }
+
+      final savedPlaylist = playlist.copyWith(id: playlistId, songs: songs);
+      _playlists.add(savedPlaylist);
+      notifyListeners();
+      return savedPlaylist;
+    } catch (e) {
+      _errorMessage = 'Failed to create mood playlist: ${e.toString()}';
+      notifyListeners();
+      return null;
+    }
+  }
+
   Future<bool> deletePlaylist(int playlistId) async {
     try {
       await _database.deletePlaylist(playlistId);

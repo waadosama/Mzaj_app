@@ -7,7 +7,6 @@ import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/charm_character.dart';
 import '../widgets/neo_card.dart';
-import '../widgets/vibe_chip.dart';
 import 'results_screen.dart';
 import 'saved_playlists_screen.dart';
 
@@ -21,14 +20,21 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _controller = TextEditingController();
-  static const _vibes = [
-    'chill lofi',
-    'summer hits',
-    'workout energy',
-    'indie dream pop',
-    '90s r&b',
-    'late night jazz',
+  static const _moods = [
+    (Icons.spa_rounded, 'Chill', 'chill lofi', MzajColors.mintBlue),
+    (Icons.water_drop_rounded, 'Sad', 'sad acoustic', MzajColors.lavender),
+    (Icons.bolt_rounded, 'Energetic', 'energetic pop', MzajColors.yellow),
+    (
+      Icons.favorite_rounded,
+      'Romantic',
+      'romantic love songs',
+      MzajColors.pink,
+    ),
+    (Icons.psychology_rounded, 'Focus', 'focus instrumental', MzajColors.lime),
+    (Icons.celebration_rounded, 'Party', 'party hits', MzajColors.softPink),
   ];
+  String? _selectedMood;
+  bool _isGenerating = false;
 
   @override
   void dispose() {
@@ -43,6 +49,101 @@ class _SearchScreenState extends State<SearchScreen> {
     await Navigator.push<void>(
       context,
       MaterialPageRoute<void>(builder: (_) => const ResultsScreen()),
+    );
+  }
+
+  Future<void> _generateMoodPlaylist(String mood, String query) async {
+    if (_isGenerating) return;
+
+    setState(() {
+      _selectedMood = mood;
+      _isGenerating = true;
+      _controller.text = query;
+    });
+
+    final searchProvider = context.read<SearchProvider>();
+    await searchProvider.search(query);
+    if (!mounted) return;
+
+    if (searchProvider.results.isEmpty) {
+      setState(() => _isGenerating = false);
+      return;
+    }
+
+    final playlist = await context.read<PlaylistProvider>().createMoodPlaylist(
+      mood,
+      searchProvider.results.take(12).toList(),
+    );
+    if (!mounted) return;
+
+    setState(() => _isGenerating = false);
+    if (playlist == null) return;
+
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(builder: (_) => const ResultsScreen()),
+    );
+  }
+
+  Widget _buildMoodCard(
+    BuildContext context,
+    (IconData, String, String, Color) mood,
+  ) {
+    final isSelected = _selectedMood == mood.$2;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _isGenerating
+            ? null
+            : () => _generateMoodPlaylist(mood.$2, mood.$3),
+        borderRadius: BorderRadius.circular(24),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: isSelected ? MzajColors.white : mood.$4,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isSelected ? MzajColors.navy : Colors.transparent,
+              width: 3,
+            ),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(mood.$1, color: MzajColors.navy, size: 19),
+                  const SizedBox(height: 3),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      mood.$2,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: MzajColors.navy,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (isSelected)
+                const Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Icon(
+                    Icons.check_rounded,
+                    color: MzajColors.navy,
+                    size: 12,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -217,59 +318,43 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             const SizedBox(height: 28),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'POPULAR VIBES',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(color: MzajColors.lime),
-                ),
-                Text(
-                  '6 picks',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: MzajColors.white.withValues(alpha: 0.7),
-                  ),
-                ),
-              ],
+            Text(
+              'CHOOSE YOUR MOOD',
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(color: MzajColors.lime),
             ),
             const SizedBox(height: 14),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: MzajColors.white.withValues(alpha: 0.08),
+                color: MzajColors.white.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   color: MzajColors.white.withValues(alpha: 0.12),
                 ),
               ),
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 12,
-                children: _vibes
-                    .map(
-                      (vibe) => VibeChip(
-                        label: vibe,
-                        isSelected: false,
-                        onTap: () {
-                          _controller.text = vibe;
-                          _search(vibe);
-                        },
-                      ),
-                    )
-                    .toList(),
+              child: GridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+                childAspectRatio: 0.86,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  for (final mood in _moods) _buildMoodCard(context, mood),
+                ],
               ),
             ),
             const SizedBox(height: 26),
             NeoButton(
-              label: 'Search music',
+              label: _isGenerating ? 'Making your playlist...' : 'Search music',
               expanded: true,
               color: MzajColors.lime,
               textColor: MzajColors.navy,
               icon: Icons.search_rounded,
-              onPressed: () => _search(_controller.text),
+              onPressed: _isGenerating ? null : () => _search(_controller.text),
             ),
             const SizedBox(height: 12),
           ],

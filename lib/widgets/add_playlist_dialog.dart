@@ -75,6 +75,8 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: MzajColors.mintBlue,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       title: const Text('Create New Playlist'),
       content: SingleChildScrollView(
         child: Column(
@@ -87,7 +89,8 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
                 hintText: 'Enter playlist name',
                 labelText: 'Playlist Name',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: BorderSide.none,
                 ),
                 prefixIcon: const Icon(Icons.playlist_play),
               ),
@@ -116,8 +119,8 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
               : const Icon(Icons.add),
           label: Text(_isLoading ? 'Creating...' : 'Create'),
           style: ElevatedButton.styleFrom(
-            backgroundColor: MzajColors.pink,
-            foregroundColor: Colors.white,
+            backgroundColor: MzajColors.navy,
+            foregroundColor: MzajColors.white,
           ),
         ),
       ],

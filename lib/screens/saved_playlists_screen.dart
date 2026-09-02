@@ -6,6 +6,7 @@ import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/add_playlist_dialog.dart';
 import '../widgets/add_songs_dialog.dart';
+import '../widgets/neo_card.dart';
 import '../widgets/playlist_card.dart';
 import 'playlist_detail_screen.dart';
 
@@ -42,13 +43,29 @@ class _SavedPlaylistsScreenState extends State<SavedPlaylistsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MzajColors.navy,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: NeoIconButton(
+          icon: Icons.arrow_back_rounded,
+          onPressed: () => Navigator.pop(context),
+        ),
+        leadingWidth: 72,
         title: const Text('My Playlists'),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
+        titleTextStyle: Theme.of(
+          context,
+        ).textTheme.titleLarge?.copyWith(color: MzajColors.white),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: NeoIconButton(
+              icon: Icons.add_rounded,
+              color: MzajColors.lime,
+              onPressed: _showCreatePlaylistDialog,
+            ),
+          ),
+        ],
       ),
-      backgroundColor: Colors.white,
       body: Consumer<PlaylistProvider>(
         builder: (ctx, playlistProvider, _) {
           if (playlistProvider.isLoading) {
@@ -59,45 +76,45 @@ class _SavedPlaylistsScreenState extends State<SavedPlaylistsScreen> {
 
           if (playlistProvider.playlists.isEmpty) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.playlist_play, size: 80, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No playlists yet',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.grey[600],
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.queue_music_rounded,
+                      size: 80,
+                      color: MzajColors.lime,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Create your first playlist to get started',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: Colors.grey[500]),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    onPressed: _showCreatePlaylistDialog,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Create Playlist'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MzajColors.pink,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+                    const SizedBox(height: 16),
+                    Text(
+                      'No playlists yet',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(color: MzajColors.white),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Create your first playlist to get started',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: MzajColors.white.withValues(alpha: 0.7),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    NeoButton(
+                      label: 'Create Playlist',
+                      color: MzajColors.lime,
+                      textColor: MzajColors.navy,
+                      icon: Icons.add_rounded,
+                      onPressed: _showCreatePlaylistDialog,
+                    ),
+                  ],
+                ),
               ),
             );
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             itemCount: playlistProvider.playlists.length,
             itemBuilder: (ctx, index) {
               final playlist = playlistProvider.playlists[index];
