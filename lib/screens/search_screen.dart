@@ -318,6 +318,15 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             const SizedBox(height: 28),
+            NeoButton(
+              label: _isGenerating ? 'Making your playlist...' : 'Search music',
+              expanded: true,
+              color: MzajColors.lime,
+              textColor: MzajColors.navy,
+              icon: Icons.search_rounded,
+              onPressed: _isGenerating ? null : () => _search(_controller.text),
+            ),
+            const SizedBox(height: 26),
             Text(
               'CHOOSE YOUR MOOD',
               style: Theme.of(
@@ -346,15 +355,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   for (final mood in _moods) _buildMoodCard(context, mood),
                 ],
               ),
-            ),
-            const SizedBox(height: 26),
-            NeoButton(
-              label: _isGenerating ? 'Making your playlist...' : 'Search music',
-              expanded: true,
-              color: MzajColors.lime,
-              textColor: MzajColors.navy,
-              icon: Icons.search_rounded,
-              onPressed: _isGenerating ? null : () => _search(_controller.text),
             ),
             const SizedBox(height: 12),
           ],

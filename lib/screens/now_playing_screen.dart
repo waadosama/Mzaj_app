@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/song.dart';
 import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/neo_card.dart';
@@ -46,16 +47,20 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final player = context.watch<PlayerProvider>();
-    final song = player.currentSong;
-
-    if (player.isPlaying) {
+  void _syncSpin(bool isPlaying) {
+    if (isPlaying) {
       _spinController.repeat();
     } else {
       _spinController.stop();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final song = context.select<PlayerProvider, Song?>(
+      (player) => player.currentSong,
+    );
+    final player = context.read<PlayerProvider>();
 
     return Scaffold(
       backgroundColor: MzajColors.navy,
@@ -103,14 +108,25 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         child: Column(
                           children: [
                             const SizedBox(height: 10),
-                            NowPlayingHeader(isPlaying: player.isPlaying),
+                            Selector<PlayerProvider, bool>(
+                              selector: (_, player) => player.isPlaying,
+                              builder: (_, isPlaying, __) {
+                                return NowPlayingHeader(isPlaying: isPlaying);
+                              },
+                            ),
                             const SizedBox(height: 18),
-                            VinylHero(
-                              song: song,
-                              size: artSize,
-                              spinController: _spinController,
-                              pulseController: _pulseController,
-                              isPlaying: player.isPlaying,
+                            Selector<PlayerProvider, bool>(
+                              selector: (_, player) => player.isPlaying,
+                              builder: (_, isPlaying, __) {
+                                _syncSpin(isPlaying);
+                                return VinylHero(
+                                  song: song,
+                                  size: artSize,
+                                  spinController: _spinController,
+                                  pulseController: _pulseController,
+                                  isPlaying: isPlaying,
+                                );
+                              },
                             ),
                             const SizedBox(height: 28),
                             SongDetails(song: song),
@@ -119,9 +135,12 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             const SizedBox(height: 24),
                             TransportControls(player: player),
                             const SizedBox(height: 22),
-                            Equalizer(
-                              animation: _pulseController,
-                              isPlaying: player.isPlaying,
+                            Selector<PlayerProvider, bool>(
+                              selector: (_, player) => player.isPlaying,
+                              builder: (_, isPlaying, __) => Equalizer(
+                                animation: _pulseController,
+                                isPlaying: isPlaying,
+                              ),
                             ),
                           ],
                         ),
