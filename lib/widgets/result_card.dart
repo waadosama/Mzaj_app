@@ -106,9 +106,9 @@ class ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor = _cardColors[index % _cardColors.length];
-    final player = context.watch<PlayerProvider>();
-    final isCurrent = player.isCurrentSong(song);
-    final isPlaying = isCurrent && player.isPlaying;
+    final isPlaying = context.select<PlayerProvider, bool>(
+      (player) => player.isCurrentSong(song) && player.isPlaying,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),

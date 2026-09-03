@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../models/playlist.dart';
 import '../models/song.dart';
@@ -66,6 +67,7 @@ class PlayerProvider extends ChangeNotifier {
   final AudioService _audio;
 
   Song? get currentSong => _audio.currentSong;
+  Stream<PlayerState> get playerStateStream => _audio.playerStateStream;
   Stream<Duration> get positionStream => _audio.positionStream;
   Stream<Duration?> get durationStream => _audio.durationStream;
   bool get isPlaying => _audio.isPlaying;
@@ -85,7 +87,6 @@ class PlayerProvider extends ChangeNotifier {
   Future<void> pause() async {
     if (currentSong == null) return;
     await _audio.pause();
-    notifyListeners();
   }
 
   bool isCurrentSong(Song song) => _audio.currentSong?.id == song.id;

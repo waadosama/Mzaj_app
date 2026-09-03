@@ -96,44 +96,44 @@ class _SearchScreenState extends State<SearchScreen> {
         onTap: _isGenerating
             ? null
             : () => _generateMoodPlaylist(mood.$2, mood.$3),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(999),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           decoration: BoxDecoration(
-            color: isSelected ? MzajColors.white : mood.$4,
-            borderRadius: BorderRadius.circular(16),
+            color: isSelected
+                ? MzajColors.lime
+                : mood.$4.withValues(alpha: 0.92),
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: isSelected ? MzajColors.navy : Colors.transparent,
-              width: 3,
+              color: isSelected
+                  ? MzajColors.white
+                  : MzajColors.white.withValues(alpha: 0.3),
+              width: 1.5,
             ),
           ),
-          child: Stack(
-            alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(mood.$1, color: MzajColors.navy, size: 19),
-                  const SizedBox(height: 3),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      mood.$2,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: MzajColors.navy,
-                        fontSize: 10,
-                      ),
+              Icon(mood.$1, color: MzajColors.navy, size: 15),
+              const SizedBox(width: 4),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    mood.$2,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: MzajColors.navy,
+                      fontSize: 9,
                     ),
                   ),
-                ],
+                ),
               ),
               if (isSelected)
-                const Positioned(
-                  right: 0,
-                  bottom: 0,
+                const Padding(
+                  padding: EdgeInsets.only(left: 3),
                   child: Icon(
                     Icons.check_rounded,
                     color: MzajColors.navy,
@@ -326,34 +326,40 @@ class _SearchScreenState extends State<SearchScreen> {
               icon: Icons.search_rounded,
               onPressed: _isGenerating ? null : () => _search(_controller.text),
             ),
-            const SizedBox(height: 26),
-            Text(
-              'CHOOSE YOUR MOOD',
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: MzajColors.lime),
-            ),
-            const SizedBox(height: 14),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: MzajColors.white.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(
-                  color: MzajColors.white.withValues(alpha: 0.12),
+            const SizedBox(height: 22),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'CHOOSE YOUR MOOD',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(color: MzajColors.lime),
                 ),
-              ),
-              child: GridView.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
-                childAspectRatio: 0.86,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  for (final mood in _moods) _buildMoodCard(context, mood),
-                ],
+                Text(
+                  '${_moods.length} moods',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: MzajColors.white.withValues(alpha: 0.62),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 42,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (var index = 0; index < _moods.length; index++) ...[
+                      SizedBox(
+                        width: 100,
+                        child: _buildMoodCard(context, _moods[index]),
+                      ),
+                      if (index < _moods.length - 1) const SizedBox(width: 8),
+                    ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 12),

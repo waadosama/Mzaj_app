@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../models/song.dart';
 import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 
 class ProgressPanel extends StatelessWidget {
-  const ProgressPanel({super.key, required this.song});
+  const ProgressPanel({super.key, required this.song, required this.isPlaying});
 
   final Song song;
+  final bool isPlaying;
 
   @override
   Widget build(BuildContext context) {
-    final player = context.watch<PlayerProvider>();
+    final player = context.read<PlayerProvider>();
     return StreamBuilder<Duration?>(
       stream: player.durationStream,
       builder: (context, durationSnapshot) {
@@ -35,7 +35,7 @@ class ProgressPanel extends StatelessWidget {
                 color: MzajColors.navy.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: player.isPlaying
+                  color: isPlaying
                       ? MzajColors.lime.withValues(alpha: 0.3)
                       : MzajColors.white.withValues(alpha: 0.36),
                 ),
@@ -49,7 +49,7 @@ class ProgressPanel extends StatelessWidget {
                       minHeight: 7,
                       backgroundColor: MzajColors.white.withValues(alpha: 0.65),
                       valueColor: AlwaysStoppedAnimation(
-                        player.isPlaying ? MzajColors.lime : MzajColors.navy,
+                        isPlaying ? MzajColors.lime : MzajColors.navy,
                       ),
                     ),
                   ),
@@ -76,10 +76,10 @@ class ProgressPanel extends StatelessWidget {
     );
   }
 
-  TextStyle? _timeStyle(BuildContext context) =>
-      Theme.of(context).textTheme.labelLarge?.copyWith(
-        color: MzajColors.navy.withValues(alpha: 0.76),
-      );
+  TextStyle? _timeStyle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .labelLarge
+      ?.copyWith(color: MzajColors.navy.withValues(alpha: 0.76));
 
   String _formatDuration(Duration duration) {
     final minutes = duration.inMinutes;

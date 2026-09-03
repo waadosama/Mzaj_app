@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/song.dart';
 import '../providers/app_providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/neo_card.dart';
@@ -36,8 +37,15 @@ Route<void> _buildNowPlayingRoute() {
   );
 }
 
-class ResultsScreen extends StatelessWidget {
+class ResultsScreen extends StatefulWidget {
   const ResultsScreen({super.key});
+
+  @override
+  State<ResultsScreen> createState() => _ResultsScreenState();
+}
+
+class _ResultsScreenState extends State<ResultsScreen> {
+  bool _isOpeningNowPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +63,22 @@ class ResultsScreen extends StatelessWidget {
       ),
       body: _buildBody(context, search),
     );
+  }
+
+  Future<void> _openNowPlaying(BuildContext context, Song song) async {
+    if (_isOpeningNowPlaying) return;
+    _isOpeningNowPlaying = true;
+
+    try {
+      final player = context.read<PlayerProvider>();
+      if (!player.isCurrentSong(song)) {
+        await player.togglePreview(song);
+      }
+      if (!context.mounted) return;
+      await Navigator.push<void>(context, _buildNowPlayingRoute());
+    } finally {
+      _isOpeningNowPlaying = false;
+    }
   }
 
   Widget _buildBody(BuildContext context, SearchProvider search) {
@@ -100,14 +124,7 @@ class ResultsScreen extends StatelessWidget {
               return ResultCard(
                 song: song,
                 index: index,
-                onTap: () async {
-                  final player = context.read<PlayerProvider>();
-                  if (!player.isCurrentSong(song)) {
-                    await player.togglePreview(song);
-                  }
-                  if (!context.mounted) return;
-                  await Navigator.push<void>(context, _buildNowPlayingRoute());
-                },
+                onTap: () => _openNowPlaying(context, song),
               );
             },
           ),
