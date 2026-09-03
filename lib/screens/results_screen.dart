@@ -71,11 +71,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
     try {
       final player = context.read<PlayerProvider>();
+      Future<void>? playback;
       if (!player.isCurrentSong(song)) {
-        await player.togglePreview(song);
+        playback = player.togglePreview(song);
       }
       if (!context.mounted) return;
       await Navigator.push<void>(context, _buildNowPlayingRoute());
+      await playback;
     } finally {
       _isOpeningNowPlaying = false;
     }
